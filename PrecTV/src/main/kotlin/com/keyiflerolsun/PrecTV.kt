@@ -89,7 +89,7 @@ class PrecTV : MainAPI() {
         val posterUrl   = fixUrlNull(this.image)
         val description = this.description
         val year        = this.year
-        val score       = this.rating?.times(1000)?.toInt()
+        val ratingValue = this.rating?.times(1000)?.toInt()
         val tags        = this.genres?.mapNotNull { it.title }
         val trailer     = this.trailer?.url
 
@@ -99,7 +99,9 @@ class PrecTV : MainAPI() {
                     this.posterUrl = posterUrl
                     this.plot      = description
                     this.year      = year
-                    this.score     = score
+                    if (ratingValue != null) {
+                        this.showRating(ratingValue)
+                    }
                     this.tags      = tags
                     addTrailer(trailer)
                 }
@@ -130,7 +132,9 @@ class PrecTV : MainAPI() {
                     this.posterUrl = posterUrl
                     this.plot      = description
                     this.year      = year
-                    this.score     = score
+                    if (ratingValue != null) {
+                        this.showRating(ratingValue)
+                    }
                     this.tags      = tags
                     addTrailer(trailer)
                 }
@@ -161,14 +165,14 @@ class PrecTV : MainAPI() {
                 poster?.sources?.forEach { source ->
                     source.url?.let { url ->
                         callback.invoke(
-                            ExtractorLink(
+                            newExtractorLink(
                                 source = this.name,
                                 name = source.title ?: this.name,
                                 url = url,
                                 referer = mainUrl,
                                 quality = getQualityFromName(source.quality ?: ""),
                                 isM3u8 = source.type == "m3u8"
-                            )
+                            ) {}
                         )
                     }
                 }
@@ -183,14 +187,14 @@ class PrecTV : MainAPI() {
                             episode.sources?.forEach { source ->
                                 source.url?.let { url ->
                                     callback.invoke(
-                                        ExtractorLink(
+                                        newExtractorLink(
                                             source = this.name,
                                             name = source.title ?: this.name,
                                             url = url,
                                             referer = mainUrl,
                                             quality = getQualityFromName(source.quality ?: ""),
                                             isM3u8 = source.type == "m3u8"
-                                        )
+                                        ) {}
                                     )
                                 }
                             }
