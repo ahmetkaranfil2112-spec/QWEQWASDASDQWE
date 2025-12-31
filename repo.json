@@ -3,6 +3,6 @@
   "description": "PrecTV için Cloudstream eklentisi",
   "manifestVersion": 1,
   "pluginLists": [
-    "https://raw.githubusercontent.com/ahmetkaranfil2112-spec/QWEQWASDASDQWE/builds/plugins.json"
+    "https://cdn.jsdelivr.net/gh/ahmetkaranfil2112-spec/QWEQWASDASDQWE@builds/plugins.json"
   ]
 }

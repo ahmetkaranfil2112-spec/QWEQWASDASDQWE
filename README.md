@@ -8,9 +8,15 @@ PrecTV için Cloudstream3 eklentisi.
 2. Ayarlar > Eklentiler > Depo Ekle
 3. Depo URL'si olarak girin:
    ```
-   https://raw.githubusercontent.com/ahmetkaranfil2112-spec/QWEQWASDASDQWE/main/repo.json
+   https://cdn.jsdelivr.net/gh/ahmetkaranfil2112-spec/QWEQWASDASDQWE@main/repo.json
    ```
 4. PrecTV eklentisini yükleyin
+
+## Alternatif Kurulum (GitHub Raw)
+
+```
+https://raw.githubusercontent.com/ahmetkaranfil2112-spec/QWEQWASDASDQWE/main/repo.json
+```
 
 ## Özellikler
 
