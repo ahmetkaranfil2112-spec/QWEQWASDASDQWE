@@ -1,0 +1,22 @@
+[
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=m.prectv60.lol&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ahmetkaranfil2112-spec/QWEQWASDASDQWE",
+        "fileSize": 24880,
+        "status": 1,
+        "language": "tr",
+        "authors": [
+            "PrecTV"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "PrecTV",
+        "description": "PrecTV - Turkish streaming service",
+        "url": "https://raw.githubusercontent.com/ahmetkaranfil2112-spec/QWEQWASDASDQWE/builds/PrecTV.cs3",
+        "name": "PrecTV"
+    }
+]
