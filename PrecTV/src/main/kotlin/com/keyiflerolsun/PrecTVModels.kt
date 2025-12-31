@@ -62,7 +62,7 @@ data class FirstResponse(
     @JsonProperty("slides") val slides: List<Slide>?
 )
 
-data class SearchResponse(
+data class PrecTVSearchResponse(
     @JsonProperty("channels") val channels: List<Any>?,
     @JsonProperty("posters") val posters: List<Poster>?
 )

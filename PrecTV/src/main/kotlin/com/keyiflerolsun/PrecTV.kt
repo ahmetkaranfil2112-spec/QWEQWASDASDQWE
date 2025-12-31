@@ -24,16 +24,16 @@ class PrecTV : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val apiUrl   = "${mainUrl}/api/first/${TOKEN}/${UUID}/"
-        val response = app.get(apiUrl).parsedSafe<FirstResponse>() ?: return newHomePageResponse("", emptyList())
+        val response = app.get(apiUrl).parsedSafe<FirstResponse>() ?: return newHomePageResponse(listOf())
 
         val home = response.slides?.mapNotNull { slide ->
             slide.poster?.toSearchResponse()
         } ?: emptyList()
 
-        return newHomePageResponse(request.name, home)
+        return newHomePageResponse(listOf(HomePageList(request.name, home)))
     }
 
-    private fun Poster.toSearchResponse(): SearchResponse? {
+    private fun Poster.toSearchResponse(): com.lagradost.cloudstream3.SearchResponse? {
         val posterId   = this.id ?: return null
         val posterType = this.type ?: return null
         val title      = this.title ?: return null
@@ -50,14 +50,14 @@ class PrecTV : MainAPI() {
         }
     }
 
-    override suspend fun search(query: String): List<SearchResponse> {
+    override suspend fun search(query: String): List<com.lagradost.cloudstream3.SearchResponse> {
         val apiUrl   = "${mainUrl}/api/search/${query}/${TOKEN}/${UUID}/"
-        val response = app.get(apiUrl).parsedSafe<com.keyiflerolsun.SearchResponse>() ?: return emptyList()
+        val response = app.get(apiUrl).parsedSafe<PrecTVSearchResponse>() ?: return emptyList()
 
         return response.posters?.mapNotNull { it.toSearchResponse() } ?: emptyList()
     }
 
-    override suspend fun quickSearch(query: String): List<SearchResponse> = search(query)
+    override suspend fun quickSearch(query: String): List<com.lagradost.cloudstream3.SearchResponse> = search(query)
 
     override suspend fun load(url: String): LoadResponse? {
         // url format: {id}|{type}
@@ -76,7 +76,7 @@ class PrecTV : MainAPI() {
 
         if (poster == null) {
             // Try search endpoint
-            val searchResponse = app.get("${mainUrl}/api/search/${posterId}/${TOKEN}/${UUID}/").parsedSafe<com.keyiflerolsun.SearchResponse>()
+            val searchResponse = app.get("${mainUrl}/api/search/${posterId}/${TOKEN}/${UUID}/").parsedSafe<PrecTVSearchResponse>()
             val searchPoster = searchResponse?.posters?.firstOrNull { it.id?.toString() == posterId }
             return searchPoster?.toLoadResponse(posterId, posterType)
         }
@@ -89,7 +89,7 @@ class PrecTV : MainAPI() {
         val posterUrl   = fixUrlNull(this.image)
         val description = this.description
         val year        = this.year
-        val rating      = this.rating?.times(2)?.toInt()
+        val score       = this.rating?.times(1000)?.toInt()
         val tags        = this.genres?.mapNotNull { it.title }
         val trailer     = this.trailer?.url
 
@@ -99,7 +99,7 @@ class PrecTV : MainAPI() {
                     this.posterUrl = posterUrl
                     this.plot      = description
                     this.year      = year
-                    this.rating    = rating
+                    this.score     = score
                     this.tags      = tags
                     addTrailer(trailer)
                 }
@@ -130,7 +130,7 @@ class PrecTV : MainAPI() {
                     this.posterUrl = posterUrl
                     this.plot      = description
                     this.year      = year
-                    this.rating    = rating
+                    this.score     = score
                     this.tags      = tags
                     addTrailer(trailer)
                 }
@@ -167,7 +167,7 @@ class PrecTV : MainAPI() {
                                 url = url,
                                 referer = mainUrl,
                                 quality = getQualityFromName(source.quality ?: ""),
-                                type = if (source.type == "m3u8") ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
+                                isM3u8 = source.type == "m3u8"
                             )
                         )
                     }
@@ -189,7 +189,7 @@ class PrecTV : MainAPI() {
                                             url = url,
                                             referer = mainUrl,
                                             quality = getQualityFromName(source.quality ?: ""),
-                                            type = if (source.type == "m3u8") ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
+                                            isM3u8 = source.type == "m3u8"
                                         )
                                     )
                                 }
